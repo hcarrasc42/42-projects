@@ -1,0 +1,34 @@
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Texto con POST</title>
+</head>
+<body>
+    <h1>Subir Texto</h1>
+    <form action="/tu_endpoint" method="POST">
+        <label for="text">Escribe tu texto:</label><br>
+        <textarea id="text" name="text" rows="4" cols="50"></textarea><br><br>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Archivos</title>
+</head>
+<body>
+    <h1>Subir Archivos</h1>
+    <form id="uploadForm" action="/post.html" method="POST" enctype="multipart/form-data">
+        <label for="file">Selecciona un archivo:</label><br>
+        <input type="file" id="file" name="file"><br><br>
+        <input type="submit" value="Subir">
+    </form>
+</body>
+</html>
+

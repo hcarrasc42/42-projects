@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - miknet
+
+  django:
+    container_name: django
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - miknet
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  angular:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    # Los volúmenes se han eliminado para evitar la sincronización en tiempo real
+    ports:
+      - "4200:4200"
+    networks:
+      - miknet
+    depends_on:
+      - django
+    env_file:
+      - .env
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - miknet
+    depends_on:
+      - postgres
+    restart: always
+
+networks:
+  miknet:
+    driver: bridge
+
+volumes:
+  django_data:

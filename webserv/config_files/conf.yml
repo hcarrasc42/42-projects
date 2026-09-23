@@ -1,0 +1,33 @@
+server:
+  servername: site1.com
+  listen: 127.0.0.1:61001
+  root: "./html/primera_pagina"
+  location: /
+    file: "index.html"
+  location: "/goto42"
+    redirect: "http://www.42urduliz.com"
+  location: "/hola"
+    file: "hola/hola.html"
+  location: "/cgi-bin"
+    file: "cgi-bin/calc.html"
+    cgi: "cgi-bin/cgiscript.py"
+  location: "/post.html"
+    file: "post.html"
+  location: "/delete.html"
+    file: "delete.html"
+  location: "/upload"
+    autoindex: on
+
+server:
+  servername: site2.com
+  listen: 127.0.0.1:61002
+  root: "./html/segunda_pagina"
+  location: /
+    file: "index.html"
+  location: "/favicon.ico"
+    file: "icon2.png"
+  location: "/images/sample"
+    file: "images/sample_image2.png"
+  location: "/cgi-bin"
+    file: "cgi-bin/otrocgi.html"
+    cgi: "cgi-bin/cgiscript1.py"
