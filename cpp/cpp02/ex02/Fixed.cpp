@@ -1,0 +1,198 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Fixed.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hcarrasc <hcarrasc@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 12:43:40 by hcarrasc          #+#    #+#             */
+/*   Updated: 2023/10/23 13:13:56 by hcarrasc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Fixed.hpp"
+
+// Constructor por defecto
+Fixed::Fixed(void) : _value(0) {
+	//std::cout << "Default constructor called" << std::endl;
+	return ;
+}
+
+// Destructor por defecto
+Fixed::~Fixed(void) {
+	//std::cout << "Destructor called" << std::endl;
+	return ;
+}
+
+// Constructor de copia
+Fixed::Fixed(const Fixed &copy) {
+	//std::cout << "Copy constructor called" << std::endl;
+	*this = copy;
+}
+
+// Constructor de int
+Fixed::Fixed(const int intValue) {
+	//std::cout << "Int constructor called" << std::endl;
+	this->_value = intValue << this->_bits; // Multiplica el valor del int por 2^8
+	return ;
+}
+
+// Constructor de float
+Fixed::Fixed(const float intFloat) {
+	//std::cout << "Float constructor called" << std::endl;
+	this->_value = roundf(intFloat * (1 << this->_bits)); // Multiplica el valor del float por 2^8
+}
+// roundf() redondea el valor del float al entero más cercano
+// (1 << this->_bits)) es lo mismo que (2^8)
+
+// Sobrecarga del operador de asignación
+Fixed &Fixed::operator=(const Fixed& copy) {
+	//std::cout << "Assignation operator called" << std::endl;		
+	if (this != &copy)
+		this->_value = copy.getRawBits();
+	return *this;
+}
+
+// Devuelve el valor del atributo _value
+int	Fixed::getRawBits(void) const {
+	//std::cout << "getRawBits member function called" << std::endl;
+	return (this->_value);
+}
+
+// Asigna el valor del parámetro raw al atributo _value
+void	Fixed::setRawBits(int const raw) {
+	//std::cout << "setRawBits member function called" << std::endl;
+	this->_value = raw;
+}
+
+// Devuelve el valor del atributo _value en float
+float	Fixed::toFloat(void) const {
+	return ((float)this->_value / (float)(1 << this->_bits)); // Divide el valor del atributo _value entre 2^8
+}
+//  return ((float)this->_value / (float)(1 << this->_bits)) equivale a dividir el valor del atributo _value entre 2^8
+//El resultado se almacena en un float
+
+
+// Devuelve el valor del atributo _value en int
+int	Fixed::toInt(void) const {
+	return (this->_value >> this->_bits); // Divide el valor del atributo _value entre 2^8
+}
+// (this->_value >> this->_bits) es lo mismo que (this->_value / (2^8))
+// Desplaza el valor del atributo _value 8 bits a la derecha
+
+// Overloaded Comparison Operators
+bool	Fixed::operator>(Fixed fixed) const
+{
+	return (this->toFloat() > fixed.toFloat()); // Compara el valor del atributo _value en float
+}
+
+bool	Fixed::operator<(Fixed fixed) const
+{
+	return (this->toFloat() < fixed.toFloat()); 
+}
+
+bool	Fixed::operator>=(Fixed fixed) const
+{
+	return (this->toFloat() >= fixed.toFloat());
+}
+
+bool	Fixed::operator<=(Fixed fixed) const
+{
+	return (this->toFloat() <= fixed.toFloat());
+}
+
+bool	Fixed::operator==(Fixed fixed) const
+{
+	return (this->toFloat() == fixed.toFloat());
+}
+
+bool	Fixed::operator!=(Fixed fixed) const
+{
+	return (this->toFloat() != fixed.toFloat());
+}
+
+// Overloaded Arithmetic Operators
+float	Fixed::operator+(Fixed fixed) const
+{
+	return (this->toFloat() + fixed.toFloat());
+}
+
+float	Fixed::operator-(Fixed fixed) const
+{
+	return (this->toFloat() - fixed.toFloat());
+}
+
+float	Fixed::operator*(Fixed fixed) const
+{
+	return (this->toFloat() * fixed.toFloat());
+}
+
+float	Fixed::operator/(Fixed fixed) const
+{
+	return (this->toFloat() / fixed.toFloat());
+}
+
+// Overloaded pre-increment Operators
+Fixed	Fixed::operator++()
+{
+	this->_value++; //	El valor del atributo _value se incrementa y se devuelve el objeto
+	return (*this);
+}
+
+Fixed	Fixed::operator--()
+{
+	this->_value--; // El valor del atributo _value se decrementa y se devuelve el objeto
+	return (*this);
+}
+
+// Overloaded post-increment Operators
+Fixed	Fixed::operator++(int)
+{
+	Fixed tmp = *this;
+
+	this->_value++; // El valor del atributo _value se incrementa y se devuelve una copia del objeto (tmp)
+	return (tmp);
+}
+
+Fixed	Fixed::operator--(int)
+{
+	Fixed tmp = *this;
+
+	this->_value--; // El valor del atributo _value se decrementa y se devuelve una copia del objeto (tmp)
+	return (tmp);
+}
+
+const Fixed & Fixed::min(const Fixed & a, const Fixed & b) // Devuelve el valor más pequeño entre a y b
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+	
+const Fixed & Fixed::max(const Fixed & a, const Fixed & b) // Devuelve el valor más grande entre a y b
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+Fixed & Fixed::min(Fixed & a, Fixed & b) // Devuelve el valor más pequeño entre a y b
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+	
+Fixed & Fixed::max(Fixed & a, Fixed & b) // Devuelve el valor más grande entre a y b
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+// Sobrecarga del operador << para mostrar el valor del atributo _value
+std::ostream	&operator<<(std::ostream &o, Fixed const &fixed)
+{
+	o << fixed.toFloat();
+	return (o);
+}
